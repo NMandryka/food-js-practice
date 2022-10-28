@@ -288,4 +288,76 @@ window.addEventListener('DOMContentLoaded', () => {
             closeModal();
         }, 4000);
     }
+
+
+    // slider
+
+    const nextSlideBtn = document.querySelector('.offer__slider-next'),
+          previousSlideBtn = document.querySelector('.offer__slider-prev'),
+          slides = document.querySelectorAll('.offer__slide'),
+          totalSlides =  document.querySelector('#total'),
+          currentSlide = document.querySelector('#current'),
+          sliderWrapper = document.querySelector('.offer__slider-wrapper'),
+          slidesField = document.querySelector('.offer__slider-inner'),
+          width = window.getComputedStyle(sliderWrapper).width;
+
+    let slideIndex = 1;
+    let offset = 0;
+
+    if(slides.length < 10) {
+        totalSlides.textContent = `0${slides.length}`;
+        currentSlide.textContent = `0${slideIndex}`;
+    } else {
+        totalSlides.textContent = slides.length;
+        currentSlide.textContent = slideIndex;
+    }
+
+    slidesField.style.width = 100 * slides.length + '%';
+    slidesField.style.display = 'flex';
+    slidesField.style.transition = '0.5s all';
+
+    sliderWrapper.style.overflow = 'hidden';
+
+    slides.forEach(slide => {
+        slide.style.width = width;
+    });
+
+    nextSlideBtn.addEventListener('click', () => {
+
+        if(offset == +width.slice(0, width.length - 2) * (slides.length - 1)) {
+            offset = 0;
+            slideIndex = 1;
+        } else {
+            slideIndex++;
+            offset += +width.slice(0, width.length - 2);
+        }
+
+        slidesField.style.transform = `translateX(-${offset}px)`;
+
+        if(slideIndex < 10) {
+            currentSlide.textContent = `0${slideIndex}`;
+        } else {
+            currentSlide.textContent = slideIndex;
+        }
+    });
+
+    previousSlideBtn.addEventListener('click', () => {
+
+        if(offset == 0) {
+            offset = +width.slice(0, width.length - 2) * (slides.length - 1);
+            slideIndex = 4;
+        } else {
+            slideIndex--;
+            offset -= +width.slice(0, width.length - 2);
+        }
+
+        slidesField.style.transform = `translateX(-${offset}px)`;
+
+        if(slideIndex < 10) {
+            currentSlide.textContent = `0${slideIndex}`;
+        } else {
+            currentSlide.textContent = slideIndex;
+        }
+    });
+
 }); 
